@@ -3,7 +3,7 @@
   xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
 
-  <groupId>org.hbase</groupId>
+  <groupId>com.chatwork</groupId>
   <artifactId>asynchbase</artifactId>
   <version>@spec_version@</version>
   <name>@spec_title@</name>
@@ -15,7 +15,7 @@
     An alternative HBase client library for applications requiring fully
     asynchronous, non-blocking and thread-safe HBase connectivity.
   </description>
-  <url>https://github.com/OpenTSDB/asynchbase</url>
+  <url>https://github.com/chatwork/asynchbase</url>
   <licenses>
     <license>
       <name>BSD</name>
@@ -24,12 +24,12 @@
     </license>
   </licenses>
   <scm>
-    <connection>scm:git:git@github.com:OpenTSDB/asynchbase.git</connection>
-    <url>https://github.com/OpenTSDB/asynchbase</url>
+    <connection>scm:git:git@github.com:chatwork/asynchbase.git</connection>
+    <url>https://github.com/chatwork/asynchbase</url>
   </scm>
   <issueManagement>
     <system>GitHub</system>
-    <url>https://github.com/OpenTSDB/asynchbase/issues</url>
+    <url>https://github.com/chatwork/asynchbase/issues</url>
   </issueManagement>
   <mailingLists>
     <mailingList>
@@ -129,6 +129,9 @@
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-gpg-plugin</artifactId>
         <version>1.5</version>
+        <configuration>
+          <skip>true</skip>
+        </configuration>
         <executions>
          <execution>
             <id>sign-artifacts</id>
@@ -138,18 +141,6 @@
             </goals>
           </execution>
         </executions>
-      </plugin>
-      
-      <plugin>
-        <groupId>org.sonatype.plugins</groupId>
-        <artifactId>nexus-staging-maven-plugin</artifactId>
-        <version>1.6.3</version>
-        <extensions>true</extensions>
-        <configuration>
-           <serverId>ossrh</serverId>
-           <nexusUrl>https://oss.sonatype.org/</nexusUrl>
-           <autoReleaseAfterClose>false</autoReleaseAfterClose>
-        </configuration>
       </plugin>
 
       <plugin>
@@ -165,7 +156,28 @@
       </plugin>
 
     </plugins>
+
+    <extensions>
+        <extension>
+          <groupId>org.springframework.build</groupId>
+          <artifactId>aws-maven</artifactId>
+          <version>5.0.0.RELEASE</version>
+        </extension>
+      </extensions>
   </build>
+
+  <distributionManagement>
+    <repository>
+      <id>chatwork-inhouse-release-repository</id>
+      <name>Chatwork's private S3 release Repository</name>
+      <url>s3://tky-chatwork-inhouse-maven-repository/releases</url>
+    </repository>
+    <snapshotRepository>
+      <id>chatwork-inhouse-snapshot-repository</id>
+      <name>Chatwork's private S3 snapshot Repository</name>
+      <url>s3://tky-chatwork-inhouse-maven-repository/snapshots</url>
+    </snapshotRepository>
+  </distributionManagement>
   
   <profiles>
     <!-- CGlib in Mockito and PowerMockito has issues mocking the Subject class under javax.security.auth. 
